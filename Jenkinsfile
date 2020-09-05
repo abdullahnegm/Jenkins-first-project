@@ -13,12 +13,13 @@ pipeline {
                 sh "docker push respect1/djangoapp"
                 }
             }
+        }
             stage('deploy') {
                 steps {
                     sh "docker run -itd respect1/djangoapp"   
                 }
                 post {
-                  succuss{
+                  success{
                         slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME}  [${env.BUILD_NUMBER}]' (${env.BUILD_URL}console)")
                   }
                     failure{
@@ -31,4 +32,3 @@ pipeline {
             }
         }
         }
-    }
