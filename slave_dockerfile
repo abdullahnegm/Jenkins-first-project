@@ -1,14 +1,20 @@
 FROM ubuntu
 USER root
 
-ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 RUN apt-get update
-RUN apt-get -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+RUN apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-RUN apt-get update  -qq \
-    && apt-get install docker-ce -y
-    
+RUN add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+RUN apt-get install docker-ce -y docker-ce-cli containerd.io
+
 RUN mkdir -p jenkins_home
 RUN chmod 777 jenkins_home
 RUN apt-get install openjdk-8-jdk -qq
@@ -18,5 +24,4 @@ USER jenkins
 WORKDIR jenkins_home
 
 CMD ["/bin/bash"]
-
 
